@@ -11,32 +11,30 @@
 #define EXPORT_API
 #endif
 
-namespace ma {
-	extern "C"
-	{
-		typedef void* HANDLE;
+extern "C"
+{
+	typedef void* HANDLE;
 
-		static CorkTriMesh mesh1;
-		static CorkTriMesh mesh2;
-		static CorkTriMesh result;
+	static CorkTriMesh mesh1;
+	static CorkTriMesh mesh2;
+	static CorkTriMesh result;
 
-		__declspec(dllexport) void MoveResultToMesh1();
-		__declspec(dllexport) void EndOp();
+	__declspec(dllexport) void RecycleResult();
+	__declspec(dllexport) void ResetMeshes();
 
-		__declspec(dllexport) bool ComputeUnion();
-		__declspec(dllexport) bool ComputeIntersection();
-		__declspec(dllexport) bool ComputeDifference();
-		__declspec(dllexport) bool ComputeSymmetricDifference();
+	__declspec(dllexport) bool ComputeUnion();
+	__declspec(dllexport) bool ComputeIntersection();
+	__declspec(dllexport) bool ComputeDifference();
+	__declspec(dllexport) bool ComputeSymmetricDifference();
 
-		__declspec(dllexport) uint GetNbVertices();
-		__declspec(dllexport) uint GetNbFaces();
-		__declspec(dllexport) __int32* GetFaces(uint* pSize);
-		__declspec(dllexport) float* GetVertices(uint* pSize);
-		__declspec(dllexport) void RemoveIntList(__int32* list);
-		__declspec(dllexport) void RemoveFloatList(float* list);
+	__declspec(dllexport) uint GetNbVertices();
+	__declspec(dllexport) uint GetNbFaces();
+	__declspec(dllexport) __int32* GetFaces(uint* pSize);
+	__declspec(dllexport) float* GetVertices(uint* pSize);
+	__declspec(dllexport) void FreeIntList(__int32* list);
+	__declspec(dllexport) void FreeFloatList(float* list);
 
-		__declspec(dllexport) bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target);		
-	}
+	__declspec(dllexport) bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target);
 }
 
 #endif

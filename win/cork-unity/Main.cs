@@ -6,47 +6,47 @@ namespace UnityCork
     public class CorkGateway
     {
         //=== sending the data
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern bool CreateTriMesh ( float[] vertices, uint n_vertices, uint[] faces, uint n_faces, int target );
 
         //=== doing the Ops
-        [DllImport ( "dllcork2")]
+        [DllImport ( "cork")]
         private static extern bool ComputeUnion ( );
 
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern bool ComputeIntersection ();
 
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern bool ComputeDifference ();
 
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern bool ComputeSymmetricDifference ();
 
         //=== getting data out of the current mesh
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern uint GetNbVertices ( );
 
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern uint GetNbFaces ();
 
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern IntPtr GetFaces ( out uint size );
 
-        [DllImport ( "dllcork2" )]
+        [DllImport ( "cork" )]
         private static extern IntPtr GetVertices ( out uint size );
 
 
-        [DllImport ( "dllcork2" )]
-        private static extern void RemoveIntList ( IntPtr array );
+        [DllImport ( "cork" )]
+        private static extern void FreeIntList ( IntPtr array );
 
-        [DllImport ( "dllcork2" )]
-        private static extern void RemoveFloatList ( IntPtr array );
+        [DllImport ( "cork" )]
+        private static extern void FreeFloatList ( IntPtr array );
 
-        [DllImport ( "dllcork2" )]
-        private static extern void MoveResultToMesh1 ();
+        [DllImport ( "cork" )]
+        private static extern void RecycleResult ();
 
-        [DllImport ( "dllcork2" )]
-        private static extern void EndOp ();
+        [DllImport ( "cork" )]
+        private static extern void ResetMeshes ();
 
 
         public static float[] GetVerticesList ()
@@ -66,8 +66,7 @@ namespace UnityCork
             }
             finally
             {
-                // don't forget to free the list
-                RemoveFloatList ( arrayValue );
+                FreeFloatList ( arrayValue );
             }
 
             return result;
@@ -90,8 +89,7 @@ namespace UnityCork
             }
             finally
             {
-                // don't forget to free the list
-                RemoveIntList ( arrayValue );
+                FreeIntList ( arrayValue );
             }
 
             return result;
@@ -99,22 +97,22 @@ namespace UnityCork
 
         public static void SendMesh ( float[] vertices, uint n_vertices, uint[] faces, uint n_faces, int target )
         {
-            CreateTriMesh( vertices, n_vertices, faces, n_faces, target );
+            CreateTriMesh ( vertices, n_vertices, faces, n_faces, target );
         }
 
-        public static void MoveResultToMesh ()
+        public static void RecycleMesh ()
         {
-            MoveResultToMesh1 ();
+            RecycleResult ();
         }
 
-        public static void CleanState ()
+        public static void Reset ()
         {
-            EndOp ();
+            ResetMeshes ();
         }
 
-        public static bool ExecuteBooleanOp ( string op_type )
+        public static bool ExecuteBooleanOp ( string type )
         {
-            switch ( op_type )
+            switch ( type )
             {
                 case "union":
                     ComputeUnion ();
@@ -125,7 +123,7 @@ namespace UnityCork
                 case "intersection":
                     ComputeIntersection ();
                     break;
-                case "symetric_difference":
+                case "symmetric_difference":
                     ComputeSymmetricDifference ();
                     break;
             }
@@ -138,5 +136,3 @@ namespace UnityCork
         }
     }
 }
-
-
