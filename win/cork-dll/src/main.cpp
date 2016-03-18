@@ -1,22 +1,24 @@
 // Win32Project1.cpp : Defines the exported functions for the DLL application.
 //
 
-
 #include "main.h"
 #include "cork.h"
 #include <stdexcept>
+#include <string>
 
-uint GetNbVertices() {
+uint GetNbVertices()
+{
 	return result.n_vertices;
 };
 
-uint GetNbFaces() {
+uint GetNbFaces()
+{
 	return result.n_triangles;
 };
 
 float* GetVertices(uint* pSize)
 {
-	int n_float = result.n_vertices * 3;
+	unsigned int n_float = result.n_vertices * 3;
 	float* list = (float*)malloc(n_float * sizeof(float));
 	for (unsigned int i = 0; i < n_float; i++)
 	{
@@ -74,82 +76,141 @@ bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces
 }
 
 
-bool ComputeUnion() {
-
-	result = {};
-
-	if (!isSolid(mesh1) || !isSolid(mesh2)) {
-		return false;
-	}
-
-	computeUnion(mesh1, mesh2, &result);
-	//current_mesh = &result;
-
-	//freeCorkTriMesh(&mesh1);
-	//freeCorkTriMesh(&mesh2);
-
-	return true;
-}
-
-bool ComputeIntersection() {
-
-	result = {};
-
-	if (!isSolid(mesh1) || !isSolid(mesh2)) {
-		return false;
-	}
-
-	computeIntersection(mesh1, mesh2, &result);
-	//current_mesh = &result;
-
-	//freeCorkTriMesh(&mesh1);
-	//freeCorkTriMesh(&mesh2);
-
-	return true;
-}
-
-bool ComputeDifference() {
-
-	result = {};
-
-	if (!isSolid(mesh1) || !isSolid(mesh2)) {
-		return false;
-	}
-
-	computeDifference(mesh1, mesh2, &result);
-	//current_mesh = &result;
-
-	//freeCorkTriMesh(&mesh1);
-	//freeCorkTriMesh(&mesh2);
-
-	return true;
-}
-
-bool ComputeSymmetricDifference()
+bool ComputeUnion(bool doSolidCheck)
 {
-	try {
-		result = {};
+	errorMessage = "";
+	result = {};
 
-		if (!isSolid(mesh1) || !isSolid(mesh2)) {
-			return false;
+	try
+	{
+		if (doSolidCheck) {
+			if (!isSolid(mesh1))
+				throw("ComputeUnion failed: first mesh failed solid check.");
+			if (!isSolid(mesh2))
+				throw("ComputeUnion failed: second mesh failed solid check.");
+		}
+
+		computeUnion(mesh1, mesh2, &result);
+		return true;
+	}
+	catch (const std::exception& ex)
+	{
+		errorMessage = "ComputeUnion failed: " + std::string(ex.what());
+		return false;
+	}
+	catch (const std::string& ex)
+	{
+		errorMessage = "ComputeUnion failed: " + ex;
+		return false;
+	}
+	catch (...)
+	{
+		errorMessage = "ComputeUnion failed: unknown error";
+		return false;
+	}
+}
+
+bool ComputeIntersection(bool doSolidCheck)
+{
+	errorMessage = "";
+	result = {};
+
+	try
+	{
+		if (doSolidCheck) {
+			if (!isSolid(mesh1))
+				throw("ComputeIntersection failed: first mesh failed solid check.");
+			if (!isSolid(mesh2))
+				throw("ComputeIntersection failed: second mesh failed solid check.");
+		}
+
+		computeIntersection(mesh1, mesh2, &result);
+		return true;
+	}
+	catch (const std::exception& ex)
+	{
+		errorMessage = "ComputeIntersection failed: " + std::string(ex.what());
+		return false;
+	}
+	catch (const std::string& ex)
+	{
+		errorMessage = "ComputeIntersection failed: " + ex;
+		return false;
+	}
+	catch (...)
+	{
+		errorMessage = "ComputeSymmetricDifference failed: unknown error";
+		return false;
+	}
+}
+
+
+bool ComputeDifference(bool doSolidCheck)
+{
+	errorMessage = "";
+	result = {};
+
+	try
+	{
+		if (doSolidCheck) {
+			if (!isSolid(mesh1))
+				throw("ComputeDifference failed: first mesh failed solid check.");
+			if (!isSolid(mesh2))
+				throw("ComputeDifference failed: second mesh failed solid check.");
+		}
+
+		computeDifference(mesh1, mesh2, &result);
+		return true;
+	}
+	catch (const std::exception& ex)
+	{
+		errorMessage = "ComputeDifference failed: " + std::string(ex.what());
+		return false;
+	}
+	catch (const std::string& ex)
+	{
+		errorMessage = "ComputeDifference failed: " + ex;
+		return false;
+	}
+	catch (...)
+	{
+		errorMessage = "ComputeDifference failed: unknown error";
+		return false;
+	}
+}
+
+
+bool ComputeSymmetricDifference(bool doSolidCheck)
+{
+	errorMessage = "";
+	result = {};
+
+	try
+	{
+		if (doSolidCheck) {
+			if (!isSolid(mesh1))
+				throw("ComputeSymmetricDifference failed: first mesh failed solid check.");
+			if (!isSolid(mesh2))
+				throw("ComputeSymmetricDifference failed: second mesh failed solid check.");
 		}
 
 		computeSymmetricDifference(mesh1, mesh2, &result);
-		//current_mesh = &result;
-
-		//freeCorkTriMesh(&mesh1);
-		//freeCorkTriMesh(&mesh2);
-
 		return true;
 	}
-	catch (const std::exception& ex) {
-		// ...
+	catch (const std::exception& ex)
+	{
+		errorMessage = "ComputeSymmetricDifference failed: " + std::string(ex.what());
+		return false;
 	}
-	catch (const std::string& ex) {
-		// ...
+	catch (const std::string& ex)
+	{
+		errorMessage = "ComputeSymmetricDifference failed: " + ex;
+		return false;
 	}
-	catch (...) {
-		// ...
+	catch (...)
+	{
+		errorMessage = "ComputeSymmetricDifference failed: unknown error";
+		return false;
 	}
 }
 

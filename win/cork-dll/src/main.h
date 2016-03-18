@@ -2,6 +2,7 @@
 #ifndef MATHASSISTANT_ARITHMETICS_ARITHMETIC_H
 #define MATHASSISTANT_ARITHMETICS_ARITHMETIC_H
 #include <cork.h>
+#include <string>
 
 #if UNITY_METRO
 #define EXPORT_API __declspec(dllexport) __stdcall
@@ -18,14 +19,15 @@ extern "C"
 	static CorkTriMesh mesh1;
 	static CorkTriMesh mesh2;
 	static CorkTriMesh result;
+	static std::string errorMessage;
 
 	__declspec(dllexport) void RecycleResult();
 	__declspec(dllexport) void ResetMeshes();
 
-	__declspec(dllexport) bool ComputeUnion();
-	__declspec(dllexport) bool ComputeIntersection();
-	__declspec(dllexport) bool ComputeDifference();
-	__declspec(dllexport) bool ComputeSymmetricDifference();
+	__declspec(dllexport) bool ComputeUnion(bool doSolidCheck);
+	__declspec(dllexport) bool ComputeIntersection(bool doSolidCheck);
+	__declspec(dllexport) bool ComputeDifference(bool doSolidCheck);
+	__declspec(dllexport) bool ComputeSymmetricDifference(bool doSolidCheck);
 
 	__declspec(dllexport) uint GetNbVertices();
 	__declspec(dllexport) uint GetNbFaces();

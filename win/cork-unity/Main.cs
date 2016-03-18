@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace UnityCork
+namespace Cork
 {
-    public class CorkGateway
+    public class Cork
     {
         //=== sending the data
         [DllImport ( "cork" )]
         private static extern bool CreateTriMesh ( float[] vertices, uint n_vertices, uint[] faces, uint n_faces, int target );
 
         //=== doing the Ops
-        [DllImport ( "cork")]
-        private static extern bool ComputeUnion ( );
+        [DllImport ( "cork" )]
+        private static extern bool ComputeUnion ( bool doSolidCheck );
 
         [DllImport ( "cork" )]
-        private static extern bool ComputeIntersection ();
+        private static extern bool ComputeIntersection ( bool doSolidCheck );
 
         [DllImport ( "cork" )]
-        private static extern bool ComputeDifference ();
+        private static extern bool ComputeDifference ( bool doSolidCheck );
 
         [DllImport ( "cork" )]
-        private static extern bool ComputeSymmetricDifference ();
+        private static extern bool ComputeSymmetricDifference ( bool doSolidCheck );
 
         //=== getting data out of the current mesh
         [DllImport ( "cork" )]
-        private static extern uint GetNbVertices ( );
+        private static extern uint GetNbVertices ();
 
         [DllImport ( "cork" )]
         private static extern uint GetNbFaces ();
@@ -48,6 +48,9 @@ namespace UnityCork
         [DllImport ( "cork" )]
         private static extern void ResetMeshes ();
 
+        [DllImport ( "cork" )]
+        private static extern string GetErrorMessage ();
+
 
         public static float[] GetVerticesList ()
         {
@@ -55,17 +58,14 @@ namespace UnityCork
             uint size;
 
             IntPtr arrayValue = IntPtr.Zero;
-            try
-            {
+            try {
                 arrayValue = GetVertices ( out size );
-                if ( arrayValue != IntPtr.Zero )
-                {
+                if ( arrayValue != IntPtr.Zero ) {
                     result = new float[size];
                     Marshal.Copy ( arrayValue, result, 0, Convert.ToInt32 ( size ) );
                 }
             }
-            finally
-            {
+            finally {
                 FreeFloatList ( arrayValue );
             }
 
@@ -78,17 +78,14 @@ namespace UnityCork
             uint size;
 
             IntPtr arrayValue = IntPtr.Zero;
-            try
-            {
+            try {
                 arrayValue = GetFaces ( out size );
-                if ( arrayValue != IntPtr.Zero )
-                {
+                if ( arrayValue != IntPtr.Zero ) {
                     result = new int[size];
-                    Marshal.Copy ( arrayValue, result, 0, Convert.ToInt32(size) );
+                    Marshal.Copy ( arrayValue, result, 0, Convert.ToInt32 ( size ) );
                 }
             }
-            finally
-            {
+            finally {
                 FreeIntList ( arrayValue );
             }
 
@@ -110,24 +107,31 @@ namespace UnityCork
             ResetMeshes ();
         }
 
-        public static bool ExecuteBooleanOp ( string type )
+        public static string GetCorkError ()
         {
-            switch ( type )
-            {
+            return GetErrorMessage ();
+        }
+
+        public static bool ExecuteBooleanOp ( string type, bool doSolidCheck )
+        {
+            bool success = true;
+
+            switch ( type ) {
                 case "union":
-                    ComputeUnion ();
+                    success = ComputeUnion ( doSolidCheck );
                     break;
                 case "difference":
-                    ComputeDifference ();
+                    success = ComputeDifference ( doSolidCheck );
                     break;
                 case "intersection":
-                    ComputeIntersection ();
+                    success = ComputeIntersection ( doSolidCheck );
                     break;
                 case "symmetric_difference":
-                    ComputeSymmetricDifference ();
+                    success = ComputeSymmetricDifference ( doSolidCheck );
                     break;
             }
-            return true;
+
+            return success;
         }
 
         public static int TestSetup ()
