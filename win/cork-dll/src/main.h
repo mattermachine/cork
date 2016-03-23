@@ -21,10 +21,22 @@ extern "C"
 	static CorkTriMesh result;
 	static std::string errorMessage;
 
+	/*
+	// http://stackoverflow.com/questions/134569/c-exception-throwing-stdstring
+	struct SolidException : public std::exception
+	{
+		std::string s;
+		SolidException(std::string ss) : s(ss) {}
+		~SolidException() throw () {}
+		const char* what() const throw() { return s.c_str(); }
+	};
+	*/
+
 	__declspec(dllexport) void RecycleResult();
 	__declspec(dllexport) void ResetMeshes();
+	void SolidCheck();
 
-	__declspec(dllexport) std::string GetErrorMessage();
+	__declspec(dllexport) const char* GetErrorMessage();
 
 	__declspec(dllexport) bool ComputeUnion(bool doSolidCheck);
 	__declspec(dllexport) bool ComputeIntersection(bool doSolidCheck);

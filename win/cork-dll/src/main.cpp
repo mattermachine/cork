@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "cork.h"
+#include "prelude.h"
 #include <stdexcept>
 #include <string>
 
@@ -81,31 +82,24 @@ bool ComputeUnion(bool doSolidCheck)
 
 	try
 	{
-		if (doSolidCheck) {
-			if (!isSolid(mesh1))
-				throw("ComputeUnion failed: first mesh failed solid check.");
-			if (!isSolid(mesh2))
-				throw("ComputeUnion failed: second mesh failed solid check.");
-		}
-
+		if (doSolidCheck)
+			SolidCheck();
 		computeUnion(mesh1, mesh2, &result);
 		return true;
 	}
 	catch (const std::exception& ex)
 	{
-		errorMessage = "ComputeUnion failed: " + std::string(ex.what());
-		return false;
+		errorMessage = "union failed: " + std::string(ex.what());
 	}
-	catch (const std::string& ex)
+	catch (const char* ex)
 	{
-		errorMessage = "ComputeUnion failed: " + ex;
-		return false;
+		errorMessage = "union failed: " + std::string(ex);
 	}
 	catch (...)
 	{
-		errorMessage = "ComputeUnion failed: unknown error";
-		return false;
+		errorMessage = "union failed: unknown error";
 	}
+	return false;
 }
 
 bool ComputeIntersection(bool doSolidCheck)
@@ -115,31 +109,24 @@ bool ComputeIntersection(bool doSolidCheck)
 
 	try
 	{
-		if (doSolidCheck) {
-			if (!isSolid(mesh1))
-				throw("ComputeIntersection failed: first mesh failed solid check.");
-			if (!isSolid(mesh2))
-				throw("ComputeIntersection failed: second mesh failed solid check.");
-		}
-
+		if (doSolidCheck)
+			SolidCheck();
 		computeIntersection(mesh1, mesh2, &result);
 		return true;
 	}
 	catch (const std::exception& ex)
 	{
-		errorMessage = "ComputeIntersection failed: " + std::string(ex.what());
-		return false;
+		errorMessage = "intersect failed: " + std::string(ex.what());
 	}
-	catch (const std::string& ex)
+	catch (const char* ex)
 	{
-		errorMessage = "ComputeIntersection failed: " + ex;
-		return false;
+		errorMessage = "intersect failed: " + std::string(ex);
 	}
 	catch (...)
 	{
-		errorMessage = "ComputeSymmetricDifference failed: unknown error";
-		return false;
+		errorMessage = "intersect failed: unknown error";
 	}
+	return false;
 }
 
 
@@ -150,31 +137,24 @@ bool ComputeDifference(bool doSolidCheck)
 
 	try
 	{
-		if (doSolidCheck) {
-			if (!isSolid(mesh1))
-				throw("ComputeDifference failed: first mesh failed solid check.");
-			if (!isSolid(mesh2))
-				throw("ComputeDifference failed: second mesh failed solid check.");
-		}
-
+		if (doSolidCheck)
+			SolidCheck();
 		computeDifference(mesh1, mesh2, &result);
 		return true;
 	}
 	catch (const std::exception& ex)
 	{
-		errorMessage = "ComputeDifference failed: " + std::string(ex.what());
-		return false;
+		errorMessage = "subtract failed: " + std::string(ex.what());
 	}
-	catch (const std::string& ex)
+	catch (const char* ex)
 	{
-		errorMessage = "ComputeDifference failed: " + ex;
-		return false;
+		errorMessage = "subtract failed: " + std::string(ex);
 	}
 	catch (...)
 	{
-		errorMessage = "ComputeDifference failed: unknown error";
-		return false;
+		errorMessage = "subtract failed: unknown error";
 	}
+	return false;
 }
 
 
@@ -185,30 +165,52 @@ bool ComputeSymmetricDifference(bool doSolidCheck)
 
 	try
 	{
-		if (doSolidCheck) {
-			if (!isSolid(mesh1))
-				throw("ComputeSymmetricDifference failed: first mesh failed solid check.");
-			if (!isSolid(mesh2))
-				throw("ComputeSymmetricDifference failed: second mesh failed solid check.");
-		}
-
+		if (doSolidCheck)
+			SolidCheck();
 		computeSymmetricDifference(mesh1, mesh2, &result);
 		return true;
 	}
 	catch (const std::exception& ex)
 	{
-		errorMessage = "ComputeSymmetricDifference failed: " + std::string(ex.what());
-		return false;
+		errorMessage = "symmetric difference failed: " + std::string(ex.what());
 	}
-	catch (const std::string& ex)
+	catch (const char* ex)
 	{
-		errorMessage = "ComputeSymmetricDifference failed: " + ex;
-		return false;
+		errorMessage = "symmetric difference failed: " + std::string(ex);
 	}
 	catch (...)
 	{
-		errorMessage = "ComputeSymmetricDifference failed: unknown error";
-		return false;
+		errorMessage = "symmetric difference failed: unknown error";
+	}
+	return false;
+}
+
+void SolidCheck() {
+	try {
+		isSolid(mesh1);
+	}
+	catch (int e) {
+		if (e == 1) {
+			CORK_ERROR("isSolid() was given a self-intersecting mesh");
+			throw "first mesh is a self-intersecting mesh.";
+		}
+		else {
+			CORK_ERROR("isSolid() was given a non-closed mesh");
+			throw "first mesh is a non-closed mesh";
+		}
+	}
+	try {
+		isSolid(mesh2);
+	}
+	catch (int e) {
+		if (e == 1) {
+			CORK_ERROR("isSolid() was given a self-intersecting mesh");
+			throw "second mesh is a self-intersecting mesh.";
+		}
+		else {
+			CORK_ERROR("isSolid() was given a non-closed mesh");
+			throw "second mesh is a non-closed mesh";
+		}
 	}
 }
 
@@ -232,7 +234,7 @@ void ResetMeshes()
 	result = {};
 }
 
-std::string GetErrorMessage()
+const char* GetErrorMessage()
 {
-	return errorMessage;
+	return errorMessage.c_str();
 }

@@ -50,10 +50,11 @@ std::ostream &err();
 #ifndef ENSURE
 #define ENSURE(STATEMENT) { \
     if(!(STATEMENT)) { \
+		std::time_t time_var = std::time(NULL); \
         std::cerr << "ENSURE FAILED at " \
                   << __FILE__ << ", line #" << __LINE__ << ":\n" \
                   << "    " << #STATEMENT << std::endl; \
-        err()     << "ENSURE FAILED at " \
+        err()     << std::ctime(&time_var) << "ENSURE FAILED at " \
                   << __FILE__ << ", line #" << __LINE__ << ":\n" \
                   << "    " << #STATEMENT << std::endl; \
 		throw std::invalid_argument( "received negative value" ); \
@@ -64,10 +65,11 @@ std::ostream &err();
 // Use ERROR to print an error message tagged with the given file/line #
 #ifndef CORK_ERROR
 #define CORK_ERROR(message) { \
+	std::time_t time_var = std::time(NULL); \
     std::cerr << "error at " \
               << __FILE__ << ", line #" << __LINE__ << ": " \
               << (message) << std::endl; \
-    err()     << "error at " \
+    err()     << std::ctime(&time_var) << "error at " \
               << __FILE__ << ", line #" << __LINE__ << ": " \
               << (message) << std::endl; \
 }
@@ -76,7 +78,8 @@ std::ostream &err();
 // Use MARKER for debugging to create a trace of control flow...
 #ifndef MARKER
 #define MARKER(message) { \
-    std::cout << "marker at " \
+	std::time_t time_var = std::time(NULL); \
+    std::cout << std::ctime(&time_var) << "marker at " \
               << __FILE__ << ", line #" << __LINE__ << ": " \
               << (message) << std::endl; \
 }

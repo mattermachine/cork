@@ -50,6 +50,7 @@ void freeCorkTriMesh(CorkTriMesh *mesh);
 // orientation, the object is interpreted as its unbounded complement
 
 // This function will test whether or not a mesh is solid
+void checkMesh(CorkTriMesh mesh);
 bool isSolid(CorkTriMesh mesh);
 
 // Boolean operations follow

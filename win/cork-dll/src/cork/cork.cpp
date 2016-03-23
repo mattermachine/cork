@@ -24,7 +24,6 @@
 // |    along with Cork.  If not, see <http://www.gnu.org/licenses/>.
 // +-------------------------------------------------------------------------
 #include "cork.h"
-
 #include "mesh.h"
 
 
@@ -137,8 +136,7 @@ void corkTriMesh2CorkMesh(
     if(max_ref_idx > in.n_vertices) {
 		/*CORK_ERROR(max_ref_idx);
 		CORK_ERROR(in.n_vertices);*/
-        CORK_ERROR("mesh input to Cork routine has an out of range reference "
-              "to a vertex.");
+        CORK_ERROR("mesh input to Cork routine has an out of range reference to a vertex.");
         raw.vertices.clear();
         raw.triangles.clear();
         *mesh_out = CorkMesh(raw);
@@ -179,24 +177,36 @@ void corkMesh2CorkTriMesh(
 }
 
 
+void checkMesh(CorkTriMesh cmesh)
+{
+	CorkMesh mesh;
+	corkTriMesh2CorkMesh(cmesh, &mesh);
+
+	if (mesh.isSelfIntersecting())
+		throw 1;
+
+	if (!mesh.isClosed())
+		throw 2;
+}
+
 bool isSolid(CorkTriMesh cmesh)
 {
-    CorkMesh mesh;
-    corkTriMesh2CorkMesh(cmesh, &mesh);
-    
-    bool solid = true;
-    
-    if(mesh.isSelfIntersecting()) {
-        CORK_ERROR("isSolid() was given a self-intersecting mesh");
-        solid = false;
-    }
-    
-    if(!mesh.isClosed()) {
-        CORK_ERROR("isSolid() was given a non-closed mesh");
-        solid = false;
-    }
-    
-    return solid;
+	CorkMesh mesh;
+	corkTriMesh2CorkMesh(cmesh, &mesh);
+
+	bool solid = true;
+
+	if (mesh.isSelfIntersecting()) {
+		CORK_ERROR("isSolid() was given a self-intersecting mesh");
+		solid = false;
+	}
+
+	if (!mesh.isClosed()) {
+		CORK_ERROR("isSolid() was given a non-closed mesh");
+		solid = false;
+	}
+
+	return solid;
 }
 
 void computeUnion(

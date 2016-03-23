@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Cork
+namespace UnityCork
 {
     public class Cork
     {
@@ -49,8 +49,8 @@ namespace Cork
         private static extern void ResetMeshes ();
 
         [DllImport ( "cork" )]
-        private static extern string GetErrorMessage ();
-
+        private static extern IntPtr GetErrorMessage ();
+        
 
         public static float[] GetVerticesList ()
         {
@@ -109,7 +109,7 @@ namespace Cork
 
         public static string GetCorkError ()
         {
-            return GetErrorMessage ();
+            return Marshal.PtrToStringAnsi ( GetErrorMessage () );
         }
 
         public static bool ExecuteBooleanOp ( string type, bool doSolidCheck )
