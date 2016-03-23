@@ -24,6 +24,8 @@ extern "C"
 	__declspec(dllexport) void RecycleResult();
 	__declspec(dllexport) void ResetMeshes();
 
+	__declspec(dllexport) std::string GetErrorMessage();
+
 	__declspec(dllexport) bool ComputeUnion(bool doSolidCheck);
 	__declspec(dllexport) bool ComputeIntersection(bool doSolidCheck);
 	__declspec(dllexport) bool ComputeDifference(bool doSolidCheck);

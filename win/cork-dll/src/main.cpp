@@ -9,12 +9,12 @@
 uint GetNbVertices()
 {
 	return result.n_vertices;
-};
+}
 
 uint GetNbFaces()
 {
 	return result.n_triangles;
-};
+}
 
 float* GetVertices(uint* pSize)
 {
@@ -71,10 +71,8 @@ bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces
 		};
 		return true;
 	}
-
 	return false;
 }
-
 
 bool ComputeUnion(bool doSolidCheck)
 {
@@ -232,4 +230,9 @@ void ResetMeshes()
 	mesh1 = {};
 	mesh2 = {};
 	result = {};
+}
+
+std::string GetErrorMessage()
+{
+	return errorMessage;
 }
