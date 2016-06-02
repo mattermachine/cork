@@ -25,6 +25,8 @@
 // +-------------------------------------------------------------------------
 #pragma once
 
+#include <chrono>
+
 #include "mesh.topoCache.cpp"
 
 #include "bbox.h"
@@ -937,6 +939,8 @@ void Mesh<VertData,TriData>::IsctProblem::bvh_edge_tri(
 template<class VertData, class TriData>
 bool Mesh<VertData,TriData>::IsctProblem::tryToFindIntersections()
 {
+	auto begin = std::chrono::high_resolution_clock::now();
+
     Empty3d::degeneracy_count = 0;
     // Find all edge-triangle intersection points
     //for_edge_tri([&](Eptr eisct, Tptr tisct)->bool{
@@ -952,7 +956,16 @@ bool Mesh<VertData,TriData>::IsctProblem::tryToFindIntersections()
             getTprob(tri)->addBoundaryEndpoint(this, tisct, eisct, iv);
         }
       }
-      if(Empty3d::degeneracy_count > 0)
+
+	  auto end = std::chrono::high_resolution_clock::now();
+	  auto elapsedTimeMilliSecs = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+	  if (elapsedTimeMilliSecs > 3e3)
+	  {
+		  throw "Finding intersections took longer than 3 seconds.";
+		  return false;
+	  }
+      
+	  if(Empty3d::degeneracy_count > 0)
         return false; // break
       else
         return true; // continue
@@ -1094,11 +1107,18 @@ bool Mesh<VertData,TriData>::IsctProblem::hasIntersections()
       return true; // continue
     });
     
-    if(Empty3d::degeneracy_count > 0 || foundIsct) {
-        std::cout << "This self-intersection might be spurious. "
-                     "Degeneracies were detected." << std::endl;
+	if (Empty3d::degeneracy_count > 0)
+	{
+		CORK_ERROR("This self-intersection might be spurious. Degeneracies were detected.");
+	}
+
+	//if(Empty3d::degeneracy_count > 0 || foundIsct)
+	if(foundIsct)
+	{
         return true;
-    } else {
+    }
+	else
+	{
         return false;
     }
 }
