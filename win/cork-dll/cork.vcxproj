@@ -73,16 +73,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <Linkage-mpir>dynamic</Linkage-mpir>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <Linkage-mpir>dynamic</Linkage-mpir>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)\bin\$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -107,8 +111,8 @@ del "$(ProjectDir)src\swig\Core\*.cxx"
 del "$(ProjectDir)..\swigcork\generated\*.cs"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy /y $(TargetPath) $(TargetDir)..\..\cork-windows\ConsoleApplication\bin\$(Configuration)
-copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\mpir.dll $(TargetDir)..\..\cork-windows\ConsoleApplication\bin\$(Configuration)</Command>
+      <Command>
+copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\mpir.dll $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -129,8 +133,8 @@ copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\m
       <AdditionalLibraryDirectories>$(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y $(TargetPath) $(TargetDir)..\..\..\cork-windows\ConsoleApplication\bin\$(Configuration)
-copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)..\..\..\cork-windows\ConsoleApplication\bin\$(Configuration)</Command>
+      <Command>
+copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,8 +158,8 @@ copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\m
       <AdditionalOptions>mpir.lib</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y $(TargetPath) $(TargetDir)..\..\cork-windows\ConsoleApplication\bin\$(Configuration)
-copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\mpir.dll $(TargetDir)..\..\cork-windows\ConsoleApplication\bin\$(Configuration)</Command>
+      <Command>
+copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\mpir.dll $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -179,8 +183,8 @@ copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\m
       <AdditionalOptions>mpir.lib</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>copy /y $(TargetPath) $(TargetDir)..\..\..\cork-windows\ConsoleApplication\bin\$(Configuration)
-copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)..\..\..\cork-windows\ConsoleApplication\bin\$(Configuration)</Command>
+      <Command>
+copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
