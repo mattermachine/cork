@@ -51,7 +51,7 @@ void freeCorkTriMesh(CorkTriMesh *mesh);
 
 // This function will test whether or not a mesh is solid
 void checkMesh(CorkTriMesh mesh);
-bool isSolid(CorkTriMesh mesh);
+bool isSolid(CorkTriMesh mesh, int& meshProblem);
 
 // Boolean operations follow
 // result = A U B

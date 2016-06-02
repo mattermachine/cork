@@ -34,7 +34,7 @@ extern "C"
 
 	__declspec(dllexport) void RecycleResult();
 	__declspec(dllexport) void ResetMeshes();
-	void SolidCheck();
+	bool SolidCheck();
 
 	__declspec(dllexport) const char* GetErrorMessage();
 

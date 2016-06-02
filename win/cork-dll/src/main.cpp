@@ -83,7 +83,13 @@ bool ComputeUnion(bool doSolidCheck)
 	try
 	{
 		if (doSolidCheck)
-			SolidCheck();
+		{
+			bool success = SolidCheck();
+			if (!success)
+			{
+				return false;
+			}
+		}
 		computeUnion(mesh1, mesh2, &result);
 		return true;
 	}
@@ -110,7 +116,13 @@ bool ComputeIntersection(bool doSolidCheck)
 	try
 	{
 		if (doSolidCheck)
-			SolidCheck();
+		{
+			bool success = SolidCheck();
+			if (!success)
+			{
+				return false;
+			}
+		}
 		computeIntersection(mesh1, mesh2, &result);
 		return true;
 	}
@@ -138,7 +150,13 @@ bool ComputeDifference(bool doSolidCheck)
 	try
 	{
 		if (doSolidCheck)
-			SolidCheck();
+		{
+			bool success = SolidCheck();
+			if (!success)
+			{
+				return false;
+			}
+		}
 		computeDifference(mesh1, mesh2, &result);
 		return true;
 	}
@@ -166,7 +184,13 @@ bool ComputeSymmetricDifference(bool doSolidCheck)
 	try
 	{
 		if (doSolidCheck)
-			SolidCheck();
+		{
+			bool success = SolidCheck();
+			if (!success)
+			{
+				return false;
+			}
+		}
 		computeSymmetricDifference(mesh1, mesh2, &result);
 		return true;
 	}
@@ -185,33 +209,100 @@ bool ComputeSymmetricDifference(bool doSolidCheck)
 	return false;
 }
 
-void SolidCheck() {
-	try {
-		isSolid(mesh1);
+bool SolidCheck()
+{
+	bool isSolidSuccess = false;
+	int meshProblem = 0;
+	// -- test mesh1 --
+	// try to perform solid check
+	// and catch exceptions accordingly
+	try
+	{
+		isSolidSuccess = isSolid(mesh1, meshProblem);
 	}
-	catch (int e) {
-		if (e == 1) {
+	catch (const std::exception& ex)
+	{
+		errorMessage = "mesh1 solidcheck failed: " + std::string(ex.what());
+		return false;
+	}
+	catch (const char* ex)
+	{
+		errorMessage = "mesh1 solidcheck failed: " + std::string(ex);
+		return false;
+	}
+	catch (...)
+	{
+		errorMessage = "mesh1 solidcheck failed: unknown error";
+		return false;
+	}
+
+	// handle result of solid check
+	if (!isSolidSuccess)
+	{
+		if (meshProblem == 1)
+		{
 			CORK_ERROR("isSolid() was given a self-intersecting mesh");
-			throw "first mesh is a self-intersecting mesh.";
+			errorMessage = "first mesh is a self-intersecting mesh.";
 		}
-		else {
+		else if (meshProblem == 2)
+		{
 			CORK_ERROR("isSolid() was given a non-closed mesh");
-			throw "first mesh is a non-closed mesh";
+			errorMessage = "first mesh is a non-closed mesh";
 		}
+		else
+		{
+			CORK_ERROR("isSolid() was given a mesh with unknown problem");
+			errorMessage = "first mesh has an unknown problem";
+		}
+
+		// return before checking mesh2, if there was already failures
+		return false;
 	}
-	try {
-		isSolid(mesh2);
+
+	// -- test mesh2 --
+	// try to perform solid check
+	// and catch exceptions accordingly
+	try
+	{
+		isSolidSuccess = isSolid(mesh2, meshProblem);
 	}
-	catch (int e) {
-		if (e == 1) {
+	catch (const std::exception& ex)
+	{
+		errorMessage = "mesh2 solidcheck failed: " + std::string(ex.what());
+		return false;
+	}
+	catch (const char* ex)
+	{
+		errorMessage = "mesh2 solidcheck failed: " + std::string(ex);
+		return false;
+	}
+	catch (...)
+	{
+		errorMessage = "mesh2 solidcheck failed: unknown error";
+		return false;
+	}
+
+	// handle result of solid check
+	if (!isSolidSuccess)
+	{
+		if (meshProblem == 1)
+		{
 			CORK_ERROR("isSolid() was given a self-intersecting mesh");
-			throw "second mesh is a self-intersecting mesh.";
+			errorMessage = "second mesh is a self-intersecting mesh.";
 		}
-		else {
+		else if (meshProblem == 2)
+		{
 			CORK_ERROR("isSolid() was given a non-closed mesh");
-			throw "second mesh is a non-closed mesh";
+			errorMessage = "second mesh is a non-closed mesh";
+		}
+		else
+		{
+			CORK_ERROR("isSolid() was given a mesh with unknown problem");
+			errorMessage = "second mesh has an unknown problem";
 		}
 	}
+
+	return isSolidSuccess;
 }
 
 void RecycleResult()

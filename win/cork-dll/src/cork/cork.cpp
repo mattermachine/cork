@@ -189,7 +189,7 @@ void checkMesh(CorkTriMesh cmesh)
 		throw 2;
 }
 
-bool isSolid(CorkTriMesh cmesh)
+bool isSolid(CorkTriMesh cmesh, int& meshProblem)
 {
 	CorkMesh mesh;
 	corkTriMesh2CorkMesh(cmesh, &mesh);
@@ -198,11 +198,13 @@ bool isSolid(CorkTriMesh cmesh)
 
 	if (mesh.isSelfIntersecting()) {
 		CORK_ERROR("isSolid() was given a self-intersecting mesh");
+		meshProblem = 1;
 		solid = false;
 	}
 
 	if (!mesh.isClosed()) {
 		CORK_ERROR("isSolid() was given a non-closed mesh");
+		meshProblem = 2;
 		solid = false;
 	}
 
