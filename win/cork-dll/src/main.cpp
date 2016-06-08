@@ -54,6 +54,18 @@ void FreeFloatList(float* list)
 
 bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target)
 {
+	/*
+	std::cout << "Cork.main.cpp.CreateTriMesh vertices (#" << n_vertices << "):" << std::endl;
+	for (int v = 0; v < n_vertices; v++)
+	{
+		std::cout << "\t(" << vertices[v * 3 + 0] << "," << vertices[v * 3 + 1] << "," << vertices[v * 3 + 2] << ")" << std::endl;
+	}
+	std::cout << "Cork.main.cpp.CreateTriMesh triangles (#" << n_faces << "):" << std::endl;
+	for (int i = 0; i < n_faces; i++)
+	{
+		std::cout << "\t(" << faces[i * 3 + 0] << "," << faces[i * 3 + 1] << "," << faces[i * 3 + 2] << ")" << std::endl;
+	}
+	*/
 	if (target == 1) {
 		mesh1 = {
 			n_faces,
@@ -241,17 +253,17 @@ bool SolidCheck()
 	{
 		if (meshProblem == 1)
 		{
-			CORK_ERROR("isSolid() was given a self-intersecting mesh");
+			CORK_ERROR("isSolid() was given a self-intersecting mesh1");
 			errorMessage = "first mesh is a self-intersecting mesh.";
 		}
 		else if (meshProblem == 2)
 		{
-			CORK_ERROR("isSolid() was given a non-closed mesh");
+			CORK_ERROR("isSolid() was given a non-closed mesh1");
 			errorMessage = "first mesh is a non-closed mesh";
 		}
 		else
 		{
-			CORK_ERROR("isSolid() was given a mesh with unknown problem");
+			CORK_ERROR("isSolid() was given a mesh1 with unknown problem");
 			errorMessage = "first mesh has an unknown problem";
 		}
 
@@ -287,17 +299,17 @@ bool SolidCheck()
 	{
 		if (meshProblem == 1)
 		{
-			CORK_ERROR("isSolid() was given a self-intersecting mesh");
+			CORK_ERROR("isSolid() was given a self-intersecting mesh2");
 			errorMessage = "second mesh is a self-intersecting mesh.";
 		}
 		else if (meshProblem == 2)
 		{
-			CORK_ERROR("isSolid() was given a non-closed mesh");
+			CORK_ERROR("isSolid() was given a non-closed mesh2");
 			errorMessage = "second mesh is a non-closed mesh";
 		}
 		else
 		{
-			CORK_ERROR("isSolid() was given a mesh with unknown problem");
+			CORK_ERROR("isSolid() was given a mesh2 with unknown problem");
 			errorMessage = "second mesh has an unknown problem";
 		}
 	}
