@@ -140,7 +140,7 @@ void corkTriMesh2CorkMesh(
         raw.vertices.clear();
         raw.triangles.clear();
         *mesh_out = CorkMesh(raw);
-        return;
+		throw "mesh input to Cork routine has an out of range reference to a vertex.";
     }
     
     for(uint i=0; i<in.n_vertices; i++) {
