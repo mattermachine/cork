@@ -26,6 +26,7 @@
 #include "cork.h"
 #include "mesh.h"
 
+#include <cstring>
 
 void freeCorkTriMesh(CorkTriMesh *mesh)
 {
@@ -112,45 +113,81 @@ void corkTriMesh2CorkMesh(
     CorkTriMesh in,
     CorkMesh *mesh_out
 ) {
-    RawCorkMesh raw;
-    raw.vertices.resize(in.n_vertices);
-    raw.triangles.resize(in.n_triangles);
-    if(in.n_vertices == 0 || in.n_triangles == 0) {
-        CORK_ERROR("empty mesh input to Cork routine.");
-        *mesh_out = CorkMesh(raw);
-        return;
-    }
-    
-    uint max_ref_idx = 0;
-    for(uint i=0; i<in.n_triangles; i++) {
-        raw.triangles[i].a = in.triangles[3*i+0];
-        raw.triangles[i].b = in.triangles[3*i+1];
-        raw.triangles[i].c = in.triangles[3*i+2];
-        max_ref_idx = std::max(
-                        std::max(max_ref_idx,
-                                 in.triangles[3*i+0]),
-                        std::max(in.triangles[3*i+1],
-                                 in.triangles[3*i+2])
-                      );
-    }
-    if(max_ref_idx > in.n_vertices) {
-		/*CORK_ERROR(max_ref_idx);
-		CORK_ERROR(in.n_vertices);*/
-        CORK_ERROR("mesh input to Cork routine has an out of range reference to a vertex.");
-        raw.vertices.clear();
-        raw.triangles.clear();
-        *mesh_out = CorkMesh(raw);
-		throw "mesh input to Cork routine has an out of range reference to a vertex.";
-    }
-    
-    for(uint i=0; i<in.n_vertices; i++) {
-        raw.vertices[i].pos.x = in.vertices[3*i+0];
-        raw.vertices[i].pos.y = in.vertices[3*i+1];
-        raw.vertices[i].pos.z = in.vertices[3*i+2];
-    }
-    
-    *mesh_out = CorkMesh(raw);
+	try
+	{
+		RawCorkMesh raw;
+		raw.vertices.resize(in.n_vertices);
+		raw.triangles.resize(in.n_triangles);
+		if (in.n_vertices == 0 || in.n_triangles == 0)
+		{
+			CORK_ERROR("empty mesh input to Cork routine.");
+			*mesh_out = CorkMesh(raw);
+			throw "empty mesh input to Cork routine.";
+			return;
+		}
+
+		uint max_ref_idx = 0;
+		uint test_max_ref_idx = 0;
+		uint max_ref_triangle_idx = 0;
+		for (uint i = 0; i < in.n_triangles; i++)
+		{
+			raw.triangles[i].a = in.triangles[3 * i + 0];
+			raw.triangles[i].b = in.triangles[3 * i + 1];
+			raw.triangles[i].c = in.triangles[3 * i + 2];
+			test_max_ref_idx = std::max(
+				std::max(max_ref_idx,
+						 in.triangles[3 * i + 0]),
+				std::max(in.triangles[3 * i + 1],
+						 in.triangles[3 * i + 2])
+			);
+			if (test_max_ref_idx > max_ref_idx)
+			{
+				max_ref_idx = test_max_ref_idx;
+				max_ref_triangle_idx = i;
+			}
+		}
+		if (max_ref_idx > in.n_vertices)
+		{
+			/*CORK_ERROR(max_ref_idx);
+			CORK_ERROR(in.n_vertices);*/
+			std::string msg = "mesh input to Cork routine for triangle idx ";
+			msg += max_ref_triangle_idx;
+			msg += " has an out of range reference to a vertex of ";
+			msg += max_ref_idx;
+			CORK_ERROR(msg);
+			raw.vertices.clear();
+			raw.triangles.clear();
+			*mesh_out = CorkMesh(raw);
+
+			throw msg.c_str();
+			return;
+		}
+
+		for (uint i = 0; i < in.n_vertices; i++)
+		{
+			raw.vertices[i].pos.x = in.vertices[3 * i + 0];
+			raw.vertices[i].pos.y = in.vertices[3 * i + 1];
+			raw.vertices[i].pos.z = in.vertices[3 * i + 2];
+		}
+
+		*mesh_out = CorkMesh(raw);
+	}
+	catch (const std::exception& ex)
+	{
+		std::string msg = "Cork internal mesh creation failed: " + std::string(ex.what());
+		throw msg.c_str();
+	}
+	catch (const char* ex)
+	{
+		std::string msg = "Cork internal mesh creation failed: " + std::string(ex);
+		throw msg.c_str();
+	}
+	catch (...)
+	{
+		throw "Cork internal mesh creation failed: unknown error";
+	}
 }
+
 void corkMesh2CorkTriMesh(
     CorkMesh *mesh_in,
     CorkTriMesh *out
