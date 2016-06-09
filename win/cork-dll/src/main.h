@@ -34,6 +34,12 @@ extern "C"
 
 	__declspec(dllexport) void RecycleResult();
 	__declspec(dllexport) void ResetMeshes();
+	__declspec(dllexport) void FreeMesh1();
+	__declspec(dllexport) void ResetMesh1();
+	__declspec(dllexport) void FreeMesh2();
+	__declspec(dllexport) void ResetMesh2();
+	__declspec(dllexport) void FreeResult();
+	__declspec(dllexport) void ResetResult();
 	bool SolidCheck();
 
 	__declspec(dllexport) const char* GetErrorMessage();
@@ -50,7 +56,7 @@ extern "C"
 	__declspec(dllexport) void FreeIntList(__int32* list);
 	__declspec(dllexport) void FreeFloatList(float* list);
 
-	__declspec(dllexport) bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target);
+	__declspec(dllexport) bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target, bool* success);
 }
 
 #endif
