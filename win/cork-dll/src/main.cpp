@@ -77,7 +77,7 @@ bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces
 	*/
 	if (target == 1)
 	{
-		std::cout << "Cork.main.cpp.CreateTriMesh mesh1 triangles ptr: " << mesh1.triangles << std::endl;
+		//std::cout << "Cork.main.cpp.CreateTriMesh mesh1 triangles ptr: " << mesh1.triangles << std::endl;
 		if ((mesh1.triangles != nullptr) || (mesh1.vertices != nullptr))
 		{
 			errorMessage = "mesh1 creation failed: existing mesh not cleared";
@@ -95,7 +95,7 @@ bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces
 	}
 	if (target == 2)
 	{
-		std::cout << "Cork.main.cpp.CreateTriMesh mesh2 triangles ptr: " << mesh2.triangles << std::endl;
+		//std::cout << "Cork.main.cpp.CreateTriMesh mesh2 triangles ptr: " << mesh2.triangles << std::endl;
 		if ((mesh2.triangles != nullptr) || (mesh2.vertices != nullptr))
 		{
 			errorMessage = "mesh2 creation failed: existing mesh not cleared";
