@@ -55,6 +55,7 @@ void FreeFloatList(float* list)
 // \NOTE: for some reason the return bool value is always marshalled true across to c#, thus the extra return param 'success'
 bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target, bool* success)
 {
+	/*
 	std::cout << "Cork.main.cpp.CreateTriMesh vertices (#" << n_vertices << "):" << std::endl;
 	for (int v = 0; v < n_vertices; v++)
 	{
@@ -73,6 +74,7 @@ bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces
 		);
 	}
 	std::cout << "Cork.main.cpp.CreateTriMesh max vertex index: " << max_ref_idx << std::endl;
+	*/
 	if (target == 1)
 	{
 		std::cout << "Cork.main.cpp.CreateTriMesh mesh1 triangles ptr: " << mesh1.triangles << std::endl;
