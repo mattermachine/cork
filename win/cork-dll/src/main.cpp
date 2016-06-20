@@ -17,15 +17,15 @@ uint GetNbFaces()
 	return result.n_triangles;
 }
 
-float* GetVertices(uint* pSize)
+double* GetVertices(uint* pSize)
 {
-	unsigned int n_float = result.n_vertices * 3;
-	float* list = (float*)malloc(n_float * sizeof(float));
-	for (unsigned int i = 0; i < n_float; i++)
+	unsigned int n_coords = result.n_vertices * 3;
+	double* list = (double*)malloc(n_coords * sizeof(double));
+	for (unsigned int i = 0; i < n_coords; i++)
 	{
 		list[i] = result.vertices[i];
 	}
-	*pSize = n_float;
+	*pSize = n_coords;
 	return list;
 }
 
@@ -52,8 +52,14 @@ void FreeFloatList(float* list)
 	free(list);
 }
 
+void FreeDoubleList(double* list)
+{
+	free(list);
+}
+
+
 // \NOTE: for some reason the return bool value is always marshalled true across to c#, thus the extra return param 'success'
-bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target, bool* success)
+bool CreateTriMesh(double vertices[], uint n_vertices, uint faces[], uint n_faces, int target, bool* success)
 {
 	/*
 	std::cout << "Cork.main.cpp.CreateTriMesh vertices (#" << n_vertices << "):" << std::endl;

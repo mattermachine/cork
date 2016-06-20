@@ -37,7 +37,7 @@ struct CorkTriMesh
     uint    n_triangles;
     uint    n_vertices;
     uint    *triangles;
-    float   *vertices;
+    double   *vertices;
 };
 
 void freeCorkTriMesh(CorkTriMesh *mesh);

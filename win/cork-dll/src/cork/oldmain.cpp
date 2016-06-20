@@ -50,7 +50,7 @@ void file2corktrimesh(
     out->n_triangles = in.triangles.size();
     
     out->triangles = new uint[(out->n_triangles) * 3];
-    out->vertices  = new float[(out->n_vertices) * 3];
+    out->vertices  = new double[(out->n_vertices) * 3];
     
     for(uint i=0; i<out->n_triangles; i++) {
         (out->triangles)[3*i+0] = in.triangles[i].a;

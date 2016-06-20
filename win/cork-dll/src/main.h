@@ -52,11 +52,12 @@ extern "C"
 	__declspec(dllexport) uint GetNbVertices();
 	__declspec(dllexport) uint GetNbFaces();
 	__declspec(dllexport) __int32* GetFaces(uint* pSize);
-	__declspec(dllexport) float* GetVertices(uint* pSize);
+	__declspec(dllexport) double* GetVertices(uint* pSize);
 	__declspec(dllexport) void FreeIntList(__int32* list);
 	__declspec(dllexport) void FreeFloatList(float* list);
+	__declspec(dllexport) void FreeDoubleList(double* list);
 
-	__declspec(dllexport) bool CreateTriMesh(float vertices[], uint n_vertices, uint faces[], uint n_faces, int target, bool* success);
+	__declspec(dllexport) bool CreateTriMesh(double vertices[], uint n_vertices, uint faces[], uint n_faces, int target, bool* success);
 }
 
 #endif
