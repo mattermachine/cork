@@ -1027,7 +1027,7 @@ bool Mesh<VertData,TriData>::IsctProblem::tryToFindIntersections()
 template<class VertData, class TriData>
 void Mesh<VertData,TriData>::IsctProblem::perturbPositions()
 {
-    const double EPSILON = 1.0e-5; // perturbation epsilon
+    const double EPSILON = 1.0e-13; // perturbation epsilon
     for(Vec3d &coord : quantized_coords) {
         Vec3d perturbation(Quantization::quantize(drand(-EPSILON, EPSILON)),
                            Quantization::quantize(drand(-EPSILON, EPSILON)),
