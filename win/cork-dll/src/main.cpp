@@ -7,6 +7,51 @@
 #include <stdexcept>
 #include <string>
 
+
+struct SEHException
+{
+	SEHException(const EXCEPTION_RECORD & record) : record(record)
+	{
+	}
+	EXCEPTION_RECORD record;
+};
+
+void translator_function(unsigned int, EXCEPTION_POINTERS * eps)
+{
+	throw SEHException(*eps->ExceptionRecord);
+}
+
+void InitSEH()
+{
+	_set_se_translator(&translator_function);
+}
+
+bool TestSEHException()
+{
+	try
+	{
+		*(int*)0 = 0;
+		return true;
+	}
+	catch (const std::exception& ex)
+	{
+		errorMessage = "test exception: " + std::string(ex.what());
+	}
+	catch (const char* ex)
+	{
+		errorMessage = "test exception: " + std::string(ex);
+	}
+	catch (SEHException& e)
+	{
+		errorMessage = "test exception: (untranslated) SEH exception caught.";
+	}
+	catch (...)
+	{
+		errorMessage = "test exception: unknown error";
+	}
+	return false;
+}
+
 uint GetNbVertices()
 {
 	return result.n_vertices;
@@ -140,6 +185,10 @@ bool ComputeUnion(bool doSolidCheck)
 		computeUnion(mesh1, mesh2, &result);
 		return true;
 	}
+	catch (SEHException& e)
+	{
+		errorMessage = "union failed: (untranslated) SEH exception caught.";
+	}
 	catch (const std::exception& ex)
 	{
 		errorMessage = "union failed: " + std::string(ex.what());
@@ -173,6 +222,10 @@ bool ComputeIntersection(bool doSolidCheck)
 		}
 		computeIntersection(mesh1, mesh2, &result);
 		return true;
+	}
+	catch (SEHException& e)
+	{
+		errorMessage = "union failed: (untranslated) SEH exception caught.";
 	}
 	catch (const std::exception& ex)
 	{
@@ -209,6 +262,10 @@ bool ComputeDifference(bool doSolidCheck)
 		computeDifference(mesh1, mesh2, &result);
 		return true;
 	}
+	catch (SEHException& e)
+	{
+		errorMessage = "union failed: (untranslated) SEH exception caught.";
+	}
 	catch (const std::exception& ex)
 	{
 		errorMessage = "subtract failed: " + std::string(ex.what());
@@ -244,6 +301,10 @@ bool ComputeSymmetricDifference(bool doSolidCheck)
 		computeSymmetricDifference(mesh1, mesh2, &result);
 		return true;
 	}
+	catch (SEHException& e)
+	{
+		errorMessage = "union failed: (untranslated) SEH exception caught.";
+	}
 	catch (const std::exception& ex)
 	{
 		errorMessage = "symmetric difference failed: " + std::string(ex.what());
@@ -269,6 +330,10 @@ bool SolidCheck()
 	try
 	{
 		isSolidSuccess = isSolid(mesh1, meshProblem);
+	}
+	catch (SEHException& e)
+	{
+		errorMessage = "union failed: (untranslated) SEH exception caught.";
 	}
 	catch (const std::exception& ex)
 	{
@@ -315,6 +380,10 @@ bool SolidCheck()
 	try
 	{
 		isSolidSuccess = isSolid(mesh2, meshProblem);
+	}
+	catch (SEHException& e)
+	{
+		errorMessage = "union failed: (untranslated) SEH exception caught.";
 	}
 	catch (const std::exception& ex)
 	{

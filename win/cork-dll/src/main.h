@@ -32,6 +32,10 @@ extern "C"
 	};
 	*/
 
+	__declspec(dllexport) void InitSEH();
+	__declspec(dllexport) bool TestSEHException();
+
+
 	__declspec(dllexport) void RecycleResult();
 	__declspec(dllexport) void ResetMeshes();
 	__declspec(dllexport) void FreeMesh1();
