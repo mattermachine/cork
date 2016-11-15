@@ -189,7 +189,19 @@ copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\m
     </Link>
     <PostBuildEvent>
       <Command>
-copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)</Command>
+copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)
+
+del /S /Q "$(TargetDir)*.pdb"
+del /S /Q "$(TargetDir)*.lib"
+
+del /S /Q "$(TargetDir)*.exp"
+
+del /S /Q "$(TargetDir)*.ilk"
+
+del /S /Q "$(TargetDir)*.iobj"
+
+del /S /Q "$(TargetDir)*.ipdb"
+</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>del /Q $(TargetDir)*.*</Command>
