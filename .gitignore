@@ -12,5 +12,6 @@ obj/
 *.user
 
 #NuGet packages
+*.nupkg
 packages/
 
