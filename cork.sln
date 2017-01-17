@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cork", "cork.vcxproj", "{E2C47B9C-6945-458D-A750-6962CCFAD7FA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cork", "win\cork-dll\cork.vcxproj", "{E2C47B9C-6945-458D-A750-6962CCFAD7FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cork-unity", "..\cork-unity\cork-unity.csproj", "{28D5F340-11D7-4C8D-9A66-C2D88CC06456}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cork-unity", "win\cork-unity\cork-unity.csproj", "{28D5F340-11D7-4C8D-9A66-C2D88CC06456}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E2C47B9C-6945-458D-A750-6962CCFAD7FA} = {E2C47B9C-6945-458D-A750-6962CCFAD7FA}
 	EndProjectSection

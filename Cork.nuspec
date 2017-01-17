@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MatterMachine.Cork</id>
+    <version>0.1.5</version>
+    <authors>MatterMachine</authors>
+    <owners>MatterMachine</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Cork Boolean Library</description>
+    <releaseNotes>First NuGet release of MatterMachine's Cork library.</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>Cork Boolean CAD</tags>
+  </metadata>
+  <files>
+    <file src="bin/x64/Release/cork.dll" target="runtimes/win10-x64/native/cork.dll" />
+    <file src="bin/x64/Release/mpir.dll" target="runtimes/win10-x64/native/mpir.dll" />
+  </files>
+</package>
