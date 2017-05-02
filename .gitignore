@@ -6,6 +6,8 @@
 .vs/
 bin/
 obj/
+[Dd]ebug/
+[Rr]elease/
 *.csproj.user
 *.VC.db
 *.VC.VC.opendb
