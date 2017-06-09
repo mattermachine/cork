@@ -140,7 +140,8 @@ copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_32\m
 copy /y $(ProjectDir)..\..\submodules\mpir-windows-builds\mpir-2.6.0_VS2015_64\mpir.dll $(TargetDir)</Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>del /Q $(TargetDir)*.*</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -206,7 +207,8 @@ del /S /Q "$(TargetDir)*.ipdb"
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>del /Q $(TargetDir)*.*</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
